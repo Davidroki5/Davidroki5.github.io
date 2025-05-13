@@ -46,6 +46,13 @@
       font-size: 16px;
       border-radius: 6px;
       cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .sidebar-toggle:hover {
+      background-color: #ff9900;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
     }
 
     .sidebar {
@@ -183,22 +190,28 @@
       }
 
       .sidebar {
-        position: relative;
+        position: fixed;
+        top: 60px;
+        left: 0;
         width: 100%;
         height: auto;
-        top: 0;
-        left: 0;
         padding: 10px;
         border-radius: 0;
-        display: none;
         flex-wrap: wrap;
         flex-direction: row;
         justify-content: center;
         overflow-x: auto;
+        display: flex;
+        transform: translateY(-200%);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.3s ease, opacity 0.3s ease;
       }
 
       .sidebar.active {
-        display: flex;
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
       }
 
       .sidebar .menu-item {
