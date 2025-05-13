@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Davids Website</title>
   <style>
     :root {
@@ -45,7 +45,7 @@
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
       border-radius: 15px;
       transition: background-color 0.3s, color 0.3s;
-      z-index: 1000;
+      z-index: 999;
     }
 
     body.light-mode .sidebar {
@@ -54,33 +54,35 @@
     }
 
     .sidebar .menu-item {
-      margin: 15px 0;
+      margin: 10px 0;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       text-decoration: none;
       color: inherit;
       display: block;
-      padding: 8px;
-      border-radius: 8px;
-      transition: color 0.3s, border 0.3s;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-color: rgba(255, 255, 255, 0.05);
+      transition: background-color 0.3s, color 0.3s, border 0.3s;
     }
 
     .sidebar .menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
       color: var(--highlight-color-dark);
     }
 
     body.light-mode .sidebar .menu-item:hover {
+      background-color: rgba(0, 0, 0, 0.05);
       color: var(--highlight-color-light);
     }
 
     .sidebar .menu-item.active {
-      color: var(--highlight-color-dark);
       border: 2px solid var(--highlight-color-dark);
     }
 
     body.light-mode .sidebar .menu-item.active {
-      color: var(--highlight-color-light);
       border: 2px solid var(--highlight-color-light);
     }
 
@@ -152,7 +154,6 @@
     .content {
       margin-left: 270px;
       padding: 20px;
-      transition: margin 0.3s;
     }
 
     .content h1 {
@@ -163,38 +164,46 @@
       font-size: 18px;
     }
 
-    /* Mobile responsive styles */
+    /* Responsive Styling for Mobile */
     @media (max-width: 768px) {
       .sidebar {
-        position: relative;
         width: 100%;
         height: auto;
+        position: relative;
         top: 0;
         left: 0;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
+        margin-bottom: 20px;
         border-radius: 0;
-        box-shadow: none;
-        padding: 10px;
-      }
-
-      .sidebar .menu-item {
-        margin: 5px;
-        font-size: 16px;
-        padding: 6px 10px;
-        flex: 1 1 auto;
-        text-align: center;
-      }
-
-      .sidebar .toggle-box {
-        width: 100%;
-        margin-top: 10px;
       }
 
       .content {
         margin-left: 0;
-        padding: 15px;
+      }
+
+      .sidebar .toggle-box {
+        padding: 6px;
+        font-size: 14px;
+      }
+
+      .toggle-switch label {
+        width: 30px;
+        height: 16px;
+      }
+
+      .toggle-switch label::after {
+        width: 12px;
+        height: 12px;
+        top: 2px;
+        left: 2px;
+      }
+
+      .toggle-switch input[type="checkbox"]:checked + label::after {
+        transform: translateX(14px);
+      }
+
+      .toggle-box p {
+        margin-top: 5px;
+        font-size: 13px;
       }
     }
   </style>
@@ -231,6 +240,11 @@
     toggle.addEventListener('change', () => {
       body.classList.toggle('dark-mode');
       body.classList.toggle('light-mode');
+
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.style.backgroundColor = body.classList.contains('light-mode')
+        ? getComputedStyle(document.documentElement).getPropertyValue('--sidebar-bg-light')
+        : getComputedStyle(document.documentElement).getPropertyValue('--sidebar-bg-dark');
     });
 
     menuItems.forEach(item => {
