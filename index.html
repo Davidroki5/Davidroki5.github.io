@@ -1,42 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Davids Website</title>
   <style>
+    :root {
+      --bg-color-light: #ffffff;
+      --text-color-light: #000000;
+      --sidebar-bg-light: #f3f3f3;
+      --highlight-color-light: #ff8c00;
+
+      --bg-color-dark: #1e1e1e;
+      --text-color-dark: #ffffff;
+      --sidebar-bg-dark: #2f2f2f;
+      --highlight-color-dark: #ffa500;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.light-mode {
+      background-color: var(--bg-color-light);
+      color: var(--text-color-light);
+    }
+
+    body.dark-mode {
+      background-color: var(--bg-color-dark);
+      color: var(--text-color-dark);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      height: calc(100% - 20px);
+      width: 250px;
+      background-color: var(--sidebar-bg-dark);
+      color: var(--text-color-dark);
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      border-radius: 15px;
+      transition: background-color 0.3s, color 0.3s;
+      z-index: 1000;
+    }
+
+    body.light-mode .sidebar {
+      background-color: var(--sidebar-bg-light);
+      color: var(--text-color-light);
+    }
+
+    .sidebar .menu-item {
+      margin: 15px 0;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      padding: 8px;
+      border-radius: 8px;
+      transition: color 0.3s, border 0.3s;
+    }
+
+    .sidebar .menu-item:hover {
+      color: var(--highlight-color-dark);
+    }
+
+    body.light-mode .sidebar .menu-item:hover {
+      color: var(--highlight-color-light);
+    }
+
+    .sidebar .menu-item.active {
+      color: var(--highlight-color-dark);
+      border: 2px solid var(--highlight-color-dark);
+    }
+
+    body.light-mode .sidebar .menu-item.active {
+      color: var(--highlight-color-light);
+      border: 2px solid var(--highlight-color-light);
+    }
+
+    .sidebar .toggle-box {
+      margin-top: 30px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      background-color: var(--sidebar-bg-dark);
+      transition: background-color 0.3s;
+    }
+
+    body.light-mode .sidebar .toggle-box {
+      background-color: var(--sidebar-bg-light);
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggle-switch input[type="checkbox"] {
+      display: none;
+    }
+
+    .toggle-switch label {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+    }
+
+    .toggle-switch label::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #ccc;
+      border-radius: 50px;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-switch label::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background-color: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .toggle-switch input[type="checkbox"]:checked + label::before {
+      background-color: var(--highlight-color-dark);
+    }
+
+    .toggle-switch input[type="checkbox"]:checked + label::after {
+      transform: translateX(20px);
+    }
+
+    body.light-mode .toggle-switch input[type="checkbox"]:checked + label::before {
+      background-color: var(--highlight-color-light);
+    }
+
+    .content {
+      margin-left: 270px;
+      padding: 20px;
+      transition: margin 0.3s;
+    }
+
+    .content h1 {
+      font-size: 24px;
+    }
+
+    .content p {
+      font-size: 18px;
+    }
+
+    /* Mobile responsive styles */
     @media (max-width: 768px) {
-  .sidebar {
-    position: static;
-    width: 100%;
-    height: auto;
-    border-radius: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 10px;
-    box-shadow: none;
-  }
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 10px;
+      }
 
-  .sidebar .menu-item {
-    margin: 5px;
-    font-size: 16px;
-    padding: 6px 10px;
-    text-align: center;
-    flex: 1 1 auto;
-  }
+      .sidebar .menu-item {
+        margin: 5px;
+        font-size: 16px;
+        padding: 6px 10px;
+        flex: 1 1 auto;
+        text-align: center;
+      }
 
-  .sidebar .toggle-box {
-    width: 100%;
-    margin-top: 10px;
-  }
+      .sidebar .toggle-box {
+        width: 100%;
+        margin-top: 10px;
+      }
 
-  .content {
-    margin-left: 0;
-    padding: 15px;
-  }
-}
-
+      .content {
+        margin-left: 0;
+        padding: 15px;
+      }
+    }
   </style>
 </head>
 <body class="dark-mode">
@@ -71,12 +231,6 @@
     toggle.addEventListener('change', () => {
       body.classList.toggle('dark-mode');
       body.classList.toggle('light-mode');
-
-      // Update sidebar background dynamically
-      const sidebar = document.querySelector('.sidebar');
-      sidebar.style.backgroundColor = body.classList.contains('light-mode')
-        ? getComputedStyle(document.documentElement).getPropertyValue('--sidebar-bg-light')
-        : getComputedStyle(document.documentElement).getPropertyValue('--sidebar-bg-dark');
     });
 
     menuItems.forEach(item => {
