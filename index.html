@@ -33,6 +33,21 @@
       color: var(--text-color-dark);
     }
 
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1001;
+      background-color: var(--highlight-color-dark);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
     .sidebar {
       position: fixed;
       top: 10px;
@@ -45,7 +60,7 @@
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
       border-radius: 15px;
       transition: background-color 0.3s, color 0.3s;
-      z-index: 999;
+      z-index: 1000;
     }
 
     body.light-mode .sidebar {
@@ -54,35 +69,33 @@
     }
 
     .sidebar .menu-item {
-      margin: 10px 0;
+      margin: 15px 0;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       text-decoration: none;
       color: inherit;
       display: block;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 2px solid transparent;
-      background-color: rgba(255, 255, 255, 0.05);
-      transition: background-color 0.3s, color 0.3s, border 0.3s;
+      padding: 8px;
+      border-radius: 8px;
+      transition: color 0.3s, border 0.3s;
     }
 
     .sidebar .menu-item:hover {
-      background-color: rgba(255, 255, 255, 0.1);
       color: var(--highlight-color-dark);
     }
 
     body.light-mode .sidebar .menu-item:hover {
-      background-color: rgba(0, 0, 0, 0.05);
       color: var(--highlight-color-light);
     }
 
     .sidebar .menu-item.active {
+      color: var(--highlight-color-dark);
       border: 2px solid var(--highlight-color-dark);
     }
 
     body.light-mode .sidebar .menu-item.active {
+      color: var(--highlight-color-light);
       border: 2px solid var(--highlight-color-light);
     }
 
@@ -164,52 +177,77 @@
       font-size: 18px;
     }
 
-    /* Responsive Styling for Mobile */
     @media (max-width: 768px) {
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        top: 0;
-        left: 0;
-        margin-bottom: 20px;
-        border-radius: 0;
+      .sidebar-toggle {
+        display: block;
       }
 
-      .content {
-        margin-left: 0;
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        top: 0;
+        left: 0;
+        padding: 10px;
+        border-radius: 0;
+        display: none;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+        overflow-x: auto;
+      }
+
+      .sidebar.active {
+        display: flex;
+      }
+
+      .sidebar .menu-item {
+        display: inline-block;
+        margin: 5px 8px;
+        font-size: 16px;
+        padding: 8px 12px;
+        white-space: nowrap;
       }
 
       .sidebar .toggle-box {
+        margin-top: 10px;
         padding: 6px;
         font-size: 14px;
+        width: 100%;
+        text-align: center;
       }
 
-      .toggle-switch label {
+      .sidebar .toggle-switch label {
         width: 30px;
         height: 16px;
       }
 
-      .toggle-switch label::after {
+      .sidebar .toggle-switch label::after {
         width: 12px;
         height: 12px;
         top: 2px;
         left: 2px;
       }
 
-      .toggle-switch input[type="checkbox"]:checked + label::after {
+      .sidebar .toggle-switch input[type="checkbox"]:checked + label::after {
         transform: translateX(14px);
       }
 
-      .toggle-box p {
+      .sidebar .toggle-box p {
         margin-top: 5px;
         font-size: 13px;
+      }
+
+      .content {
+        margin-left: 0;
       }
     }
   </style>
 </head>
 <body class="dark-mode">
-  <div class="sidebar">
+  <button class="sidebar-toggle">☰ Menu</button>
+
+  <div class="sidebar" id="sidebar">
     <a href="#" class="menu-item active" data-content="Welcome to the Home Page!">Home</a>
     <a href="#" class="menu-item" data-content="Here are your Projects">Projects</a>
     <a href="#" class="menu-item" data-content="Explore our Apps">Apps</a>
@@ -236,15 +274,12 @@
     const body = document.body;
     const menuItems = document.querySelectorAll('.menu-item');
     const content = document.querySelector('.content');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
 
     toggle.addEventListener('change', () => {
       body.classList.toggle('dark-mode');
       body.classList.toggle('light-mode');
-
-      const sidebar = document.querySelector('.sidebar');
-      sidebar.style.backgroundColor = body.classList.contains('light-mode')
-        ? getComputedStyle(document.documentElement).getPropertyValue('--sidebar-bg-light')
-        : getComputedStyle(document.documentElement).getPropertyValue('--sidebar-bg-dark');
     });
 
     menuItems.forEach(item => {
@@ -254,7 +289,15 @@
 
         const contentText = event.target.getAttribute('data-content');
         content.innerHTML = `<h1>${contentText}</h1><p>Content related to "${event.target.innerText}" is displayed here.</p>`;
+
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove('active');
+        }
       });
+    });
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
     });
   </script>
 </body>
